@@ -1,0 +1,22 @@
+{
+    "name": "teclaelvis/rabbitmq-phalcon-adapter",
+    "description": "Adapter package for phalcon project",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pmqelvis\\": "./src/Pmqelvis"
+        }
+    },
+    "authors": [
+        {
+            "name": "Elvis Reyes",
+            "email": "teclaelvis01@gmail.com"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {
+        "php": ">=7.0",
+        "php-amqplib/php-amqplib": "3.5"
+    }
+}
