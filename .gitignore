@@ -2,3 +2,5 @@
 composer.phar
 test.php
 composer.lock
+.env
+_build
