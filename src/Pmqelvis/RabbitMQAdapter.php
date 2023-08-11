@@ -50,6 +50,7 @@ class RabbitMQAdapter implements QueueAdapterInterface
                 'verify_peer' => false
             ];
             $this->connection = new AMQPSSLConnection($host, $port, $user, $password, '/', $sslOptions);
+            $this->channel = $this->connection->channel();
             return;
         }
         $this->connection = new AMQPStreamConnection($host, $port, $user, $password);
