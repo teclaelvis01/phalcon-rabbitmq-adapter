@@ -5,7 +5,7 @@ Adapter for phalcon queue manager
 ## Installation
 
 ```bash
-composer require teclaelvis/rabbitmq-phalcon-adapter:1.0.1
+composer require teclaelvis/rabbitmq-phalcon-adapter:1.0.2
 ```
 
 
