@@ -2,11 +2,67 @@
 Adapter for phalcon queue manager
 
 
-## Instalación
+## Installation
 
 ```bash
 composer require teclaelvis/rabbitmq-phalcon-adapter:1.0.0
 ```
+
+
+## Initial configuration
+
+We need to create a new instance of the `QueueManagerFactory` class and pass the adapter as a parameter.
+
+
+```php
+use Pmqelvis\QueueManagerFactory;
+use Pmqelvis\RabbitMQAdapter;
+
+require __DIR__ . '/vendor/autoload.php';
+
+
+// // create a new instance of the rabbitmq adapter
+
+$adapter = new RabbitMQAdapter('localhost', 5672, 'guest', 'guest');
+$queueFactory = new QueueManagerFactory($adapter);
+
+``````
+
+If you are working with a `ssl connection`, you can use the follow code:
+
+```php
+$adapter = new RabbitMQAdapter('localhost', 5672, 'guest', 'guest', true);
+ 
+// continue with the configuration
+...
+```
+
+in Phalcon we can use the `QueueManagerFactory` class as a service, for example:
+
+```php
+$di->setShared('queue', function () use ($config) {
+    $ssl = getenv('APPLICATION_ENV') != 'development';
+    $adapter = new RabbitMQAdapter(
+        $config->rabbitmq->host,
+        $config->rabbitmq->port,
+        $config->rabbitmq->user,
+        $config->rabbitmq->password,
+        $ssl
+    );
+    return new QueueManagerFactory($adapter);
+});
+```
+
+and then we can use it in our logic to get the queue manager:
+
+```php
+
+$queueFactory = $this->di->getShared('queue');
+
+...
+
+```
+
 
 ## Producer configuration
 
@@ -20,11 +76,14 @@ use Pmqelvis\RabbitMQAdapter;
 require __DIR__ . '/vendor/autoload.php';
 
 
-// // create a new instance of the rabbitmq adapter
-$adapter = new RabbitMQAdapter('localhost', 5672, 'guest', 'guest');
-$manageFactory = new QueueManagerFactory($adapter);
+/**
+ *  before we need get the QueueManagerFactory instance
+ * $queueFactory = new QueueManagerFactory($adapter);
+ */
+...
+...
 
-$queue = $manageFactory->build('test', 'producer', 'test-exchange');
+$queue = $queueFactory->build('test', 'producer', 'test-exchange');
 $queue->publish('Hello World from my library');
     
 ```
@@ -41,13 +100,15 @@ use Pmqelvis\RabbitMQAdapter;
 require __DIR__ . '/vendor/autoload.php';
 
 
-// // create a new instance of the rabbitmq adapter
+/**
+ *  before we need get the QueueManagerFactory instance
+ * $queueFactory = new QueueManagerFactory($adapter);
+ */
+...
+...
 
-$adapter = new RabbitMQAdapter('localhost', 5672, 'guest', 'guest');
-$manageFactory = new QueueManagerFactory($adapter);
 
-
-$queue = $manageFactory->build('test','consumer' ,'test-exchange');
+$queue = $queueFactory->build('test','consumer' ,'test-exchange');
 
 $queue->consume(function ($message) {
     echo $message->body;
@@ -58,14 +119,7 @@ $queue->consume(function ($message) {
 
 The code above will consume the messages from the queue and print the message body and `$message->ack()` will acknowledge the message.
 
-If you are working with a `ssl connection`, you can use the follow code:
 
-```php
-$adapter = new RabbitMQAdapter('localhost', 5672, 'guest', 'guest', true);
- 
-// continue with the configuration
-...
-```
 
 
 ## RabbitMQAdapter options
