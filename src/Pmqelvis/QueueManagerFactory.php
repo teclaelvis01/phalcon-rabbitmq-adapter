@@ -23,12 +23,11 @@ class QueueManagerFactory
      */
     public function build($queueName, $type = 'consumer', $exchangeName = '', $typeExchange = RabbitMQAdapter::ExchangeTypeDirect)
     {
-        $adapter = clone $this->adapter;
         switch ($type) {
             case 'consumer':
-                return new ConsumeQueue($adapter, $queueName, $exchangeName, $typeExchange);
+                return new ConsumeQueue($this->adapter, $queueName, $exchangeName, $typeExchange);
             case 'producer':
-                return new ProducerQueue($adapter, $queueName, $exchangeName, $typeExchange);
+                return new ProducerQueue($this->adapter, $queueName, $exchangeName, $typeExchange);
             default:
                 throw new \Exception('Invalid queue manager type');
         }
