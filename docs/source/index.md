@@ -7,7 +7,7 @@ For install `phalcon-rabbitmq-adapter` library you can use composer:
 ## Installation
 
 ```bash
-composer require teclaelvis/rabbitmq-phalcon-adapter:1.0.0
+composer require teclaelvis/rabbitmq-phalcon-adapter:1.0.1
 ```
 
 ## Phalcon usage
