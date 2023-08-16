@@ -11,7 +11,7 @@ interface QueueAdapterInterface
     
     public function channel(): AMQPChannel;
 
-    public function connection();
+    public function connection(): AMQPStreamConnection | AMQPSSLConnection;
     
 
 

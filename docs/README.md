@@ -40,7 +40,7 @@ $adapter = new RabbitMQAdapter('localhost', 5672, 'guest', 'guest', true);
 in Phalcon we can use the `QueueManagerFactory` class as a service, for example:
 
 ```php
-$di->setShared('queue', function () use ($config) {
+$di->set('queue', function () use ($config) {
     $ssl = getenv('APPLICATION_ENV') != 'development';
     $adapter = new RabbitMQAdapter(
         $config->rabbitmq->host,
@@ -57,7 +57,7 @@ and then we can use it in our logic to get the queue manager:
 
 ```php
 
-$queueFactory = $this->di->getShared('queue');
+$queueFactory = $this->di->get('queue');
 
 ...
 

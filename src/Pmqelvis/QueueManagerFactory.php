@@ -2,6 +2,8 @@
 
 namespace Pmqelvis;
 
+use PhpAmqpLib\Connection\AMQPSSLConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class QueueManagerFactory
 {
@@ -31,5 +33,15 @@ class QueueManagerFactory
             default:
                 throw new \Exception('Invalid queue manager type');
         }
+    }
+
+    // TODO: return connection object
+    /**
+     * get connection
+     * @return  AMQPStreamConnection | AMQPSSLConnection;
+     */
+    public function getConnection()
+    {
+        return $this->adapter->connection();
     }
 }
