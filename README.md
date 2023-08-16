@@ -84,6 +84,8 @@ require __DIR__ . '/vendor/autoload.php';
 ...
 
 $queue = $queueFactory->build('test', 'producer', 'test-exchange');
+// or
+$queue = $queueFactory->buildProducer('test' ,'test-exchange');
 $queue->publish('Hello World from my library');
     
 ```
@@ -109,6 +111,8 @@ require __DIR__ . '/vendor/autoload.php';
 
 
 $queue = $queueFactory->build('test','consumer' ,'test-exchange');
+// or
+$queue = $queueFactory->buildConsumer('test' ,'test-exchange');
 
 $queue->consume(function ($message) {
     echo $message->body;

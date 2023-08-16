@@ -2,7 +2,7 @@
 
 namespace Pmqelvis;
 
-use PhpAmqpLib\Connection\AMQPSSLConnection;
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class QueueManagerFactory
@@ -35,6 +35,28 @@ class QueueManagerFactory
         }
     }
 
+    /**
+     * @param string $queueName
+     * @param string $exchangeName
+     * @param string $typeExchange 'direct' | 'fanout' | 'topic' | 'headers'
+     * @return ConsumeQueue
+     */
+    public function buildConsumer($queueName, $exchangeName = '', $typeExchange = RabbitMQAdapter::ExchangeTypeDirect)
+    {
+        return new ConsumeQueue($this->adapter, $queueName, $exchangeName, $typeExchange);
+    }
+
+    /**
+     * @param string $queueName
+     * @param string $exchangeName
+     * @param string $typeExchange 'direct' | 'fanout' | 'topic' | 'headers'
+     * @return ProducerQueue
+     */
+    public function buildProducer($queueName, $exchangeName = '', $typeExchange = RabbitMQAdapter::ExchangeTypeDirect)
+    {
+        return new ProducerQueue($this->adapter, $queueName, $exchangeName, $typeExchange);
+    }
+
     // TODO: return connection object
     /**
      * get connection
@@ -43,5 +65,14 @@ class QueueManagerFactory
     public function getConnection()
     {
         return $this->adapter->connection();
+    }
+
+    /**
+     * get channel
+     * @return AMQPChannel
+     */
+    public function getChannel()
+    {
+        return $this->adapter->channel();
     }
 }
