@@ -65,7 +65,7 @@ class RabbitMQAdapter implements QueueAdapterInterface
     /**
      * @return AMQPStreamConnection | AMQPSSLConnection
      */
-    public function connection(): AMQPStreamConnection | AMQPSSLConnection
+    public function connection()
     {
         return $this->connection;
     }
