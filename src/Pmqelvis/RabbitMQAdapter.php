@@ -42,14 +42,14 @@ class RabbitMQAdapter implements QueueAdapterInterface
 
     protected $ssl;
 
-    public function __construct(string $host, int $port, string $user, string $password, bool $ssl = false)
+    public function __construct(string $host, int $port, string $user, string $password, bool $ssl = false, array $options = [])
     {
         $this->ssl = $ssl;
         if ($this->ssl) {
             $sslOptions = [
                 'verify_peer' => false
             ];
-            $this->connection = new AMQPSSLConnection($host, $port, $user, $password, '/', $sslOptions);
+            $this->connection = new AMQPSSLConnection($host, $port, $user, $password, '/', $sslOptions, $options);
             $this->channel = $this->connection->channel();
             return;
         }

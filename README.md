@@ -132,6 +132,7 @@ The code above will consume the messages from the queue and print the message bo
 | user | string | '' | RabbitMQ user |
 | password | string | '' | RabbitMQ password |
 | ssl | bool | false | Enable ssl mode |
+| options | array | [] | RabbitMQ connection options |
 
 ## QueueManagerFactory options
 
