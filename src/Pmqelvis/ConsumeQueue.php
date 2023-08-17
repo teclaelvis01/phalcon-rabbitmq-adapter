@@ -46,9 +46,10 @@ class ConsumeQueue  implements ConsumeQueueInterface
         $this->adapter->channel()->basic_qos(null, 1, null);
         $this->adapter->channel()->basic_consume($this->queueName, '', false, false, false, false, $callback);
 
-        while (count($this->adapter->channel()->callbacks)) {
+        while ($this->adapter->channel()->is_open()) {
             $this->adapter->channel()->wait();
         }
+        $this->__destruct();
     }
 
     public function __destruct()
