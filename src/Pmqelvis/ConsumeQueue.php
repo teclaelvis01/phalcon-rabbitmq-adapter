@@ -22,13 +22,19 @@ class ConsumeQueue  implements ConsumeQueueInterface
      */
     protected $typeExchange;
 
+    /**
+     * @var bool
+     */
+    protected $destroy;
 
-    public function __construct(QueueAdapterInterface $adapter, string $queueName, $exchangeName = '', $typeExchange = RabbitMQAdapter::ExchangeTypeDirect)
+
+    public function __construct(QueueAdapterInterface $adapter, string $queueName, $exchangeName = '', $typeExchange = RabbitMQAdapter::ExchangeTypeDirect, $destroy = false)
     {
         $this->adapter = $adapter;
         $this->queueName = $queueName;
         $this->exchangeName = $exchangeName;
         $this->typeExchange = $typeExchange;
+        $this->destroy = $destroy;
 
 
 
@@ -54,6 +60,9 @@ class ConsumeQueue  implements ConsumeQueueInterface
 
     public function __destruct()
     {
+        if(!$this->destroy){
+            return;
+        }
         $this->adapter->channel()->close();
         $this->adapter->connection()->close();
     }

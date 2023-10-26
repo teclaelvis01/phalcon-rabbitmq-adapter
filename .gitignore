@@ -4,3 +4,4 @@ test.php
 composer.lock
 .env
 _build
+.DS_Store
