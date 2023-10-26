@@ -47,20 +47,28 @@ class ConsumeQueue  implements ConsumeQueueInterface
         }
     }
 
-    public function consume($callback):void
+    public function consume($callback): void
     {
-        $this->adapter->channel()->basic_qos(null, 1, null);
-        $this->adapter->channel()->basic_consume($this->queueName, '', false, false, false, false, $callback);
+        while (true) {
+            try {
+                $this->adapter->channel()->basic_qos(null, 1, null);
+                $this->adapter->channel()->basic_consume($this->queueName, '', false, false, false, false, $callback);
 
-        while ($this->adapter->channel()->is_open()) {
-            $this->adapter->channel()->wait();
+                while ($this->adapter->channel()->is_open()) {
+                    $this->adapter->channel()->wait();
+                }
+                $this->__destruct();
+            } catch (\PhpAmqpLib\Exception\AMQPIOException $th) {
+                new \Exception('[Internal] [ConsumeQueue] AMQPIOException: ' . $th->getMessage());
+            } catch (\Throwable $th) {
+                new \Exception('[Internal] [ConsumeQueue] Throwable: ' . $th->getMessage());
+            }
         }
-        $this->__destruct();
     }
 
     public function __destruct()
     {
-        if(!$this->destroy){
+        if (!$this->destroy) {
             return;
         }
         $this->adapter->channel()->close();
